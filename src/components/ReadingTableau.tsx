@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { DrawnCard, TarotSpread, TarotCard } from '@/types/tarot';
 import { TarotCardView } from './TarotCardView';
 import { CardDetailModal } from './CardDetailModal';
+import { synthesizeTarotReading } from '@/lib/clientSynthesis';
 import { SynthesisResult } from '@/lib/readingSynthesis';
 import { sound } from '@/lib/sound';
 import {
@@ -78,29 +79,14 @@ export const ReadingTableau: React.FC<ReadingTableauProps> = ({
     sound.playCardDeal();
 
     try {
-      let customApiKey: string | undefined = undefined;
-      if (typeof window !== 'undefined') {
-        const stored = localStorage.getItem('tarot_gemini_api_key');
-        if (stored) customApiKey = stored;
-      }
-
-      const res = await fetch('/api/tarot-reading', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question,
-          spread,
-          drawnCards: cards,
-          customApiKey,
-        }),
-      });
-
-      const data = await res.json();
-      if (data.success && data.result) {
-        setReadingResult(data.result);
-        setReadingSource(data.source || 'Oracle Engine');
-        sound.playChime();
-      }
+      const { result, source } = await synthesizeTarotReading(
+        question,
+        spread,
+        cards
+      );
+      setReadingResult(result);
+      setReadingSource(source);
+      sound.playChime();
     } catch (err) {
       console.error('Error synthesizing reading:', err);
     } finally {

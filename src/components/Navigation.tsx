@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, BookOpen, Wand2, Volume2, VolumeX, Settings, ExternalLink } from 'lucide-react';
+import Image from 'next/image';
+import { Sparkles, BookOpen, Wand2, Volume2, VolumeX, Settings, ExternalLink, Download } from 'lucide-react';
 import { sound } from '@/lib/sound';
+import { usePwa } from './PwaProvider';
 
 interface NavigationProps {
   currentTab: 'oracle' | 'grimoire';
@@ -16,6 +18,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onOpenSettings,
 }) => {
   const [isMuted, setIsMuted] = useState(false);
+  const { openInstallModal, isInstalled } = usePwa();
 
   useEffect(() => {
     setIsMuted(sound.getMuted());
@@ -34,8 +37,15 @@ export const Navigation: React.FC<NavigationProps> = ({
         onClick={() => onSelectTab('oracle')}
         className="flex items-center gap-3 cursor-pointer group"
       >
-        <div className="w-9 h-9 rounded-xl border border-occult-gold/60 bg-occult-card flex items-center justify-center shadow-parchment group-hover:border-occult-gold transition-colors">
-          <Sparkles className="w-5 h-5 text-occult-gold group-hover:rotate-45 transition-transform" />
+        <div className="w-10 h-10 rounded-xl border border-occult-gold/60 bg-occult-card flex items-center justify-center shadow-parchment group-hover:border-occult-gold transition-colors overflow-hidden p-0.5">
+          <Image
+            src="/icon-192.png"
+            alt="Dark Forest Tarot Icon"
+            width={40}
+            height={40}
+            className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform"
+            priority
+          />
         </div>
         <div>
           <span className="font-serif text-base sm:text-lg font-bold tracking-wider text-parchment-100 flex items-center gap-1.5">
@@ -80,8 +90,22 @@ export const Navigation: React.FC<NavigationProps> = ({
         </button>
       </div>
 
-      {/* Right Controls: Audio, Settings, External Source Guide */}
+      {/* Right Controls: Audio, Install, Settings, External Source Guide */}
       <div className="flex items-center gap-2">
+        {/* PWA Install Button */}
+        {!isInstalled && (
+          <button
+            onClick={openInstallModal}
+            title="Install Tarot Sanctuary App"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-occult-gold/70 bg-occult-gold/15 text-occult-gold-light hover:bg-occult-gold/30 hover:border-occult-gold shadow-sm transition-all"
+          >
+            <Download className="w-3.5 h-3.5 text-occult-gold animate-bounce" />
+            <span className="text-xs font-serif tracking-wider uppercase hidden sm:inline">
+              Install App
+            </span>
+          </button>
+        )}
+
         {/* Audio Toggle */}
         <button
           onClick={handleToggleSound}

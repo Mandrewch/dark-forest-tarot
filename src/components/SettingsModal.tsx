@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Key, Volume2, VolumeX, Sparkles, Shield, RotateCcw, Check } from 'lucide-react';
+import { X, Key, Volume2, VolumeX, Sparkles, Shield, RotateCcw, Check, Download, Smartphone } from 'lucide-react';
 import { sound } from '@/lib/sound';
+import { usePwa } from './PwaProvider';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [apiKey, setApiKey] = useState('');
   const [isMuted, setIsMuted] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const { openInstallModal, isInstalled } = usePwa();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -131,6 +133,39 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             >
               {allowReversals ? 'Enabled' : 'Disabled'}
             </button>
+          </div>
+
+          {/* App Installation */}
+          <div className="flex items-center justify-between p-3 rounded-xl border border-occult-gold/30 bg-black/40">
+            <div className="flex items-center gap-3">
+              <Smartphone className="w-5 h-5 text-occult-gold" />
+              <div>
+                <h5 className="font-serif text-sm font-semibold text-parchment-100">
+                  Device Application
+                </h5>
+                <p className="text-[11px] text-parchment-400">
+                  {isInstalled
+                    ? 'Running as standalone installed app'
+                    : 'Install to desktop or home screen for offline ritual access'}
+                </p>
+              </div>
+            </div>
+            {isInstalled ? (
+              <span className="px-2.5 py-1 rounded-lg border border-emerald-500/50 bg-emerald-950/40 text-emerald-300 text-xs font-serif">
+                Installed
+              </span>
+            ) : (
+              <button
+                onClick={() => {
+                  onClose();
+                  openInstallModal();
+                }}
+                className="px-3 py-1.5 rounded-lg border border-occult-gold bg-occult-gold/20 hover:bg-occult-gold/30 text-occult-gold-light text-xs font-serif flex items-center gap-1.5 transition-colors"
+              >
+                <Download className="w-3.5 h-3.5 text-occult-gold" />
+                <span>Install</span>
+              </button>
+            )}
           </div>
 
           {/* Gemini API Key */}

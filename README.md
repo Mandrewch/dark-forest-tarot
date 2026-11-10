@@ -43,6 +43,11 @@ An interactive, responsive Tarot Reading web application based on the complete [
 - One-click **Copy Reading (Markdown)** formatted with all cards, positions, and synthesis.
 - Print-ready view for saving as a parchment PDF or hardcopy journal entry.
 
+### 7. Installable Progressive Web App (PWA) & Offline Sanctuary
+- **Installable Native App Feel**: Installable on Windows, macOS, Android, and iOS directly from the browser with custom occult compass medallion app icons (192px, 512px, maskable, apple touch icon, favicon).
+- **Offline First**: Dedicated Service Worker (`sw.js`) precaches the application shell and assets. The complete 78-card Rider-Waite-Smith grimoire, card drawing spreads, procedural Web Audio chimes, and deterministic oracle interpretation engine function without an internet connection.
+- **In-App Install Trigger**: Instant "Install App" button in the top navigation bar and Sanctum Settings with platform-specific instructions for iOS Safari and desktop/Android.
+
 ---
 
 ## 🚀 Getting Started
